@@ -107,6 +107,17 @@ namespace SSH
         }
         private String _keyfile = "";
 
+        //SSH Key Content
+        private string[] _keystring = new string[] { };
+
+        [Parameter(Mandatory = false,
+            ValueFromPipelineByPropertyName = true,
+            ParameterSetName = "KeyString")]
+        public string[] KeyString
+        {
+            get { return _keystring; }
+            set { _keystring = value; }
+        }
 
         //Local Folder
         [Parameter(Mandatory = true,
@@ -207,41 +218,57 @@ namespace SSH
             foreach (var computer in _computername)
             {
                 ConnectionInfo connectInfo;
-                if (_keyfile.Equals(""))
+                switch (ParameterSetName)
                 {
-                    WriteVerbose("Using SSH Username and Password authentication for connection.");
-                    var kIconnectInfo = new KeyboardInteractiveAuthenticationMethod(_credential.UserName);
-                    connectInfo = ConnectionInfoGenerator.GetCredConnectionInfo(computer,
-                        _port,
-                        _credential,
-                        _proxyserver,
-                        _proxytype,
-                        _proxyport,
-                        _proxycredential,
-                        kIconnectInfo);
+                    case "NoKey":
+                        WriteVerbose("Using SSH Username and Password authentication for connection.");
+                        var kIconnectInfo = new KeyboardInteractiveAuthenticationMethod(_credential.UserName);
+                        connectInfo = ConnectionInfoGenerator.GetCredConnectionInfo(computer,
+                            _port,
+                            _credential,
+                            _proxyserver,
+                            _proxytype,
+                            _proxyport,
+                            _proxycredential,
+                            kIconnectInfo);
 
-                    // Event Handler for interactive Authentication
-                    kIconnectInfo.AuthenticationPrompt += delegate(object sender, AuthenticationPromptEventArgs e)
-                    {
-                        foreach (var prompt in e.Prompts)
+                        // Event Handler for interactive Authentication
+                        kIconnectInfo.AuthenticationPrompt += delegate (object sender, AuthenticationPromptEventArgs e)
                         {
-                            if (prompt.Request.Contains("Password"))
-                                prompt.Response = _credential.GetNetworkCredential().Password;
-                        }
-                    };
+                            foreach (var prompt in e.Prompts)
+                            {
+                                if (prompt.Request.Contains("Password"))
+                                    prompt.Response = _credential.GetNetworkCredential().Password;
+                            }
+                        };
+                        break;
+                    case "Key":
+                        ProviderInfo provider;
+                        var pathinfo = GetResolvedProviderPathFromPSPath(_keyfile, out provider);
+                        var localfullPath = pathinfo[0];
+                        connectInfo = ConnectionInfoGenerator.GetKeyConnectionInfo(computer,
+                            _port,
+                            localfullPath,
+                            _credential,
+                            _proxyserver,
+                            _proxytype,
+                            _proxyport,
+                            _proxycredential);
+                        break;
+                    case "KeyString":
+                        WriteVerbose("Using SSH Key authentication for connection.");
+                        connectInfo = ConnectionInfoGenerator.GetKeyConnectionInfo(computer,
+                            _port,
+                            _keystring,
+                            _credential,
+                            _proxyserver,
+                            _proxytype,
+                            _proxyport,
+                            _proxycredential);
+                        break;
 
-                }
-                else
-                {
-                    WriteVerbose("Using SSH Key authentication for connection.");
-                    connectInfo = ConnectionInfoGenerator.GetKeyConnectionInfo(computer,
-                        _port,
-                        _keyfile,
-                        _credential,
-                        _proxyserver,
-                        _proxytype,
-                        _proxyport,
-                        _proxycredential);
+                    default:
+                        break;
                 }
 
                 //Ceate instance of SSH Client with connection info
