@@ -140,11 +140,7 @@ namespace SSH
 
         // OperationTimeout Parameter
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public int OperationTimeout
         {
             get { return _operationtimeout; }

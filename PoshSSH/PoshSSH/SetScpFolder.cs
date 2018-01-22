@@ -17,12 +17,7 @@ namespace SSH
         [ValidateNotNullOrEmpty]
         [Parameter(Mandatory = true,
             ValueFromPipelineByPropertyName = true,
-            Position = 0,
-            ParameterSetName = "NoKey")]
-        [Parameter(Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            Position = 0,
-            ParameterSetName = "Key")]
+            Position = 0)]
         [Alias("HostName", "Computer", "IPAddress", "Host")]
         public string[] ComputerName
         {
@@ -35,12 +30,7 @@ namespace SSH
         [ValidateNotNullOrEmpty]
         [Parameter(Mandatory = true,
             ValueFromPipelineByPropertyName = true,
-            Position = 1,
-            ParameterSetName = "NoKey")]
-        [Parameter(Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            Position = 1,
-            ParameterSetName = "Key")]
+            Position = 1)]
         [System.Management.Automation.CredentialAttribute()]
         public PSCredential Credential
         {
@@ -53,11 +43,7 @@ namespace SSH
         private Int32 _port = 22;
 
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
+            ValueFromPipelineByPropertyName = true)]
         public Int32 Port
         {
             get { return _port; }
@@ -67,11 +53,7 @@ namespace SSH
 
         //Proxy Server to use
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
+            ValueFromPipelineByPropertyName = true)]
         public String ProxyServer
         {
             get { return _proxyserver; }
@@ -83,11 +65,7 @@ namespace SSH
         private Int32 _proxyport = 8080;
 
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
+            ValueFromPipelineByPropertyName = true)]
         public Int32 ProxyPort
         {
             get { return _proxyport; }
@@ -97,11 +75,7 @@ namespace SSH
 
         // Proxy Credentials
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
+            ValueFromPipelineByPropertyName = true,)]
         [ValidateNotNullOrEmpty]
         [System.Management.Automation.CredentialAttribute()]
         public PSCredential ProxyCredential
@@ -114,11 +88,7 @@ namespace SSH
         // Proxy Type
         [ValidateSet("HTTP", "Socks4", "Socks5", IgnoreCase = true)]
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public string ProxyType
         {
             get { return _proxytype; }
@@ -137,13 +107,10 @@ namespace SSH
         }
         private String _keyfile = "";
 
+
         //Local Folder
         [Parameter(Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public String LocalFolder
         {
             get { return _localfolder; }
@@ -153,11 +120,7 @@ namespace SSH
 
         //Remote Folder
         [Parameter(Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = true,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public String RemoteFolder
         {
             get { return _remotefolder; }
@@ -167,11 +130,7 @@ namespace SSH
 
         // OperationTimeout Parameter
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public int OperationTimeout
         {
             get { return _operationtimeout; }
@@ -181,11 +140,7 @@ namespace SSH
 
         // ConnectionTimeout Parameter
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public int ConnectionTimeout
         {
             get { return _connectiontimeout; }
@@ -196,11 +151,7 @@ namespace SSH
         // Auto Accept key fingerprint
         private bool _acceptkey;
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public SwitchParameter AcceptKey
         {
             get { return _acceptkey; }
@@ -210,11 +161,7 @@ namespace SSH
         // Automatically error if key is not trusted.
         private bool _errorOnUntrusted = false;
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public SwitchParameter ErrorOnUntrusted
         {
             get { return _errorOnUntrusted; }
@@ -224,11 +171,7 @@ namespace SSH
         // Supress progress bar.
         private bool _noProgress = false;
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true)]
         public SwitchParameter NoProgress
         {
             get { return _noProgress; }
@@ -238,11 +181,7 @@ namespace SSH
         // Do not check server fingerprint.
         private bool _force = false;
         [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "Key")]
-        [Parameter(Mandatory = false,
-            ValueFromPipelineByPropertyName = true,
-            ParameterSetName = "NoKey")]
+            ValueFromPipelineByPropertyName = true,)]
         public SwitchParameter Force
         {
             get { return _force; }
